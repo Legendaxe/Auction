@@ -1,0 +1,31 @@
+﻿@using Auction.Models
+@using Auction.Services
+@inject IRandomService RandomService
+
+<h3 color="green">Random Number: @_result</h3>
+<button onclick="@RollSlots">Roll</button>
+
+@code {
+    private string _result = String.Empty;
+    
+    [Parameter, EditorRequired]
+    public IEnumerable<Slot> Slots { get; set; } = null!;
+    
+    [Parameter, EditorRequired]
+    public decimal TotalPrice { get; set; }
+
+    private void RollSlots()
+    {
+        var randomValue = (decimal)RandomService.RandomDouble() * TotalPrice;
+
+        foreach (var slot in Slots)
+        {
+            randomValue -= slot.Price;
+            if (randomValue <= 0)
+            {
+                _result = slot.Name;
+                return;
+            }
+        }
+    }
+}

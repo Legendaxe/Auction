@@ -7,23 +7,24 @@
 <button onclick="@AddEmptySlot">+</button>
 <button onclick="@SortSlotsByPrice">Sort</button>
 
-<SlotList Slots="@_slots" DeletedSlot="DeleteSlot" ValueChanged="() => { }" />
+<SlotList Slots="@_slots" DeletedSlot="DeleteSlot" ValueChanged="() => {_totalPrice = TotalPrice;}" />
 
-<h3>Total Price: @TotalPrice</h3>
+<h3>Total Price: @_totalPrice</h3>
+
+<SlotsRandom Slots="_slots" TotalPrice="_totalPrice"></SlotsRandom>
+
 
 @code
 {
-    private int _maxId = 3;
+    private decimal _totalPrice;
+    private int _maxId;
     private List<Slot> _slots = new List<Slot>
     {
-        new Slot(0, "asdasssd", 4m),
-        new Slot(1, "asdasadsd", 4m),
-        new Slot(2, "aasdsdasd", 4m),
-        new Slot(3, "asdassssssd", 4m)
+        new Slot(0, String.Empty, 0m)
     };
 
     public decimal TotalPrice => _slots.Sum(slot => slot.Price);
-
+    
     public void SortSlotsById()
     {
 
@@ -48,5 +49,6 @@
     private void DeleteSlot(Slot slot)
     {
         _slots.Remove(slot);
+        _totalPrice = TotalPrice;
     }
 }
