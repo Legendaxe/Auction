@@ -1,0 +1,33 @@
+﻿@using Auction.Models
+<h3>SlotList</h3>
+
+<ol>
+    @foreach (var slot in Slots)
+    {
+        <li>
+            <SlotItem Model="@slot" DeleteButtonClick="DeleteSlot" ValueChanged="OnValueChanged"/>
+        </li>
+    }
+</ol>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public IEnumerable<Slot> Slots { get; set; } = null!;
+    
+    [Parameter]
+    public EventCallback<Slot> DeletedSlot { get; set; }
+    
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
+    private void OnValueChanged()
+    {
+        ValueChanged.InvokeAsync();
+    }
+
+    private void DeleteSlot(Slot slot)
+    {
+        DeletedSlot.InvokeAsync(slot);
+    }
+}

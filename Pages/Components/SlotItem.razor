@@ -1,0 +1,26 @@
+﻿@using Auction.Models
+
+<label>#@Model.Id</label>
+<InputText @bind-Value="Model!.Name" placeholder="Name"/>
+<InputNumber @bind-Value="Model.Price" 
+             @bind-Value:after="() => {ValueChanged.InvokeAsync();}" 
+             placeholder="$"/>
+<button @onclick="OnDeleteButtonClick">-</button>
+
+
+
+@code {
+    [Parameter, EditorRequired]
+    public Slot Model { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<Slot> DeleteButtonClick { get; set; }
+    
+    [Parameter]
+    public EventCallback ValueChanged { get; set; }
+
+    private async Task OnDeleteButtonClick()
+    {
+        await DeleteButtonClick.InvokeAsync(Model);
+    }
+}

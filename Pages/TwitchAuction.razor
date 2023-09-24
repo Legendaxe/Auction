@@ -1,0 +1,52 @@
+﻿@page "/auction"
+@using Auction.Models
+@using Auction.Pages.Components
+
+<PageTitle>Auction</PageTitle>
+
+<button onclick="@AddEmptySlot">+</button>
+<button onclick="@SortSlotsByPrice">Sort</button>
+
+<SlotList Slots="@_slots" DeletedSlot="DeleteSlot" ValueChanged="() => { }" />
+
+<h3>Total Price: @TotalPrice</h3>
+
+@code
+{
+    private int _maxId = 3;
+    private List<Slot> _slots = new List<Slot>
+    {
+        new Slot(0, "asdasssd", 4m),
+        new Slot(1, "asdasadsd", 4m),
+        new Slot(2, "aasdsdasd", 4m),
+        new Slot(3, "asdassssssd", 4m)
+    };
+
+    public decimal TotalPrice => _slots.Sum(slot => slot.Price);
+
+    public void SortSlotsById()
+    {
+
+        _slots = true ? 
+            _slots.OrderByDescending(slot => slot.Id).ToList() :
+            _slots.OrderBy(slot => slot.Id).ToList();;
+    }
+    
+    public void SortSlotsByPrice()
+    {
+
+        _slots = true ? 
+            _slots.OrderByDescending(slot => slot.Price).ToList() :
+            _slots.OrderBy(slot => slot.Price).ToList();;
+    }
+
+    private void AddEmptySlot()
+    {
+        _slots.Add(new Slot(++_maxId, String.Empty, 0m));
+    }
+
+    private void DeleteSlot(Slot slot)
+    {
+        _slots.Remove(slot);
+    }
+}
